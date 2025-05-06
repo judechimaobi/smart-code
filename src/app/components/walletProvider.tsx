@@ -10,7 +10,8 @@ import {
   SolflareWalletAdapter
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-require("@solana/wallet-adapter-react-ui/styles.css");
+// require("@solana/wallet-adapter-react-ui/styles.css");
+import "@solana/wallet-adapter-react-ui/styles.css";
 
 export const SolanaWalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const endpoint = "https://api.mainnet-beta.solana.com"; // Use devnet for testing

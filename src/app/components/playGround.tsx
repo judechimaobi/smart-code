@@ -32,7 +32,7 @@ export default function PlayGround() {
       const data = await res.json();
       setAiResult(data.result);
     } catch (error) {
-      setAiResult('❌ Error analyzing code.');
+      setAiResult('❌ Error analyzing code: ' + error);
     } finally {
       setLoading(false);
     }
