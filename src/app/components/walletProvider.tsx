@@ -10,10 +10,14 @@ import {
   SolflareWalletAdapter
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-// require("@solana/wallet-adapter-react-ui/styles.css");
+// Removed unused commented-out import to satisfy ESLint rules
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-export const SolanaWalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
+interface SolanaWalletProviderProps {
+  children: ReactNode;
+}
+
+export const SolanaWalletProvider: FC<SolanaWalletProviderProps> = ({ children }) => {
   const endpoint = "https://api.mainnet-beta.solana.com"; // Use devnet for testing
   const wallets = useMemo(() => [new PhantomWalletAdapter(), new SolflareWalletAdapter()], []);
 

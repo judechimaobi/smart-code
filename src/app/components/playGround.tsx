@@ -2,16 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 import Prism from 'prismjs';
+import { highlight, languages } from "prismjs";
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-javascript';
+import { Menu, Loader, CheckCircle, AlertCircle } from 'lucide-react';
+import Editor from "react-simple-code-editor";
+
 
 export default function PlayGround() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [code, setCode] = useState(`function helloWorld() {
   console.log('Hello, world!');
 }`);
-  const [aiResult, setAiResult] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     Prism.highlightAll();
@@ -27,12 +32,21 @@ export default function PlayGround() {
         },
         body: JSON.stringify({ code }),
       });
-      console.log(res);
-
       const data = await res.json();
-      setAiResult(data.result);
-    } catch (error) {
-      setAiResult('❌ Error analyzing code: ' + error);
+      if (res.ok) {
+        setAiResult(data.result);
+        setError('');
+      } else {
+        setError(data.error || 'Failed to fetch audit result');
+        setAiResult('');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+      setAiResult('');
     } finally {
       setLoading(false);
     }
@@ -42,12 +56,14 @@ export default function PlayGround() {
     <div className="min-h-screen bg-gray-900 text-[#EEEEEE]">
       {/* NavBar */}
       <nav className="hidden md:flex items-center justify-between px-4 py-10 bg-gray-900 shadow-lg shadow-gray z-50 w-full fixed">
-        <div className="text-xl font-bold">Code <span className='text-red-600'>RED</span></div>
+        <div className="text-xl font-bold">
+          Code <span className="text-red-600">RED</span>
+        </div>
         <button
-          className="md:hidden block text-white"
+          className="md:hidden block text-white focus:outline-none"
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
-          ☰
+          <Menu size={24} />
         </button>
       </nav>
 
@@ -61,11 +77,26 @@ export default function PlayGround() {
         >
           <h2 className="text-lg font-semibold mb-4">Projects</h2>
           <ul className="space-y-2">
-            <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 1</li>
-            <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 2</li>
-            <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 3</li>
-            <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 4</li>
-            <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 5</li>
+            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+              <CheckCircle size={18} className="text-green-500" />
+              Item 1
+            </li>
+            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+              <CheckCircle size={18} className="text-green-500" />
+              Item 2
+            </li>
+            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+              <CheckCircle size={18} className="text-green-500" />
+              Item 3
+            </li>
+            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+              <CheckCircle size={18} className="text-green-500" />
+              Item 4
+            </li>
+            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+              <CheckCircle size={18} className="text-green-500" />
+              Item 5
+            </li>
           </ul>
         </div>
 
@@ -74,31 +105,62 @@ export default function PlayGround() {
           {/* Input Column */}
           <div className="w-full md:w-2/4 lg:w-2/5 bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-2">Code Editor</h2>
-            <textarea
-              className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] px-6 py-8 rounded-2xl resize-none shadow-xl shadow-black/45"
+            {/* <textarea
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setCode(e.target.value)}
+              className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] px-6 py-8 rounded-2xl resize-none shadow-lg font-mono border-2 border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/50 text-sm"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              placeholder="Paste your code here..."
+            /> */}
+            <Editor
+              value={code}
+              onValueChange={setCode}
+              highlight={(code) => highlight(code, languages.javascript, "javascript")}
+              padding={16}
+              className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] font-mono text-sm rounded-2xl border-2 border-gray-600 shadow-lg focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/50"
+              style={{
+                whiteSpace: "pre-wrap",
+                outline: "none",
+                overflow: "auto",
+              }}
               placeholder="Paste your code here..."
             />
+            {/* <pre className="mt-4 p-4 bg-gray-800 text-[#EEEEEE] rounded-2xl overflow-auto shadow-xl shadow-black/45">
+              <code className="language-javascript">{code}</code>
+            </pre> */}
             <button
-              className="mt-4 w-full py-3 px-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold"
+              className="mt-4 w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold cursor-pointer flex items-center justify-center gap-2"
               onClick={handleAudit}
               disabled={loading}
             >
-              {loading ? 'Analyzing...' : 'Audit Code'}
+              {loading ? (
+                <>
+                  <Loader size={18} className="animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                'Audit Code'
+              )}
             </button>
           </div>
 
           {/* AI Response Column */}
           <div className="w-full md:w-2/4 lg:w-3/5 bg-gray-900 p-6">
             <h2 className="text-lg font-semibold mb-2">AI Analysis</h2>
-            <div className="bg-gray-800 p-4 rounded-2xl h-full shadow-xl shadow-black/45 overflow-auto whitespace-pre-wrap">
+            <div className="bg-gray-800 p-4 rounded-2xl h-full shadow-xl overflow-auto whitespace-pre-wrap">
               {loading ? (
-                <p className="text-gray-400">⏳ Running GPT-4 Audit...</p>
+                <p className="text-gray-400 flex items-center gap-2">
+                  <Loader size={18} className="animate-spin" />
+                  Running GPT-3.5 Audit...
+                </p>
+              ) : error ? (
+                <p className="text-red-600 flex items-center gap-2">
+                  <AlertCircle size={18} />
+                  {error}
+                </p>
               ) : aiResult ? (
                 <p>{aiResult}</p>
               ) : (
-                <p className="text-gray-500">Your AI-generated code analysis will appear here.</p>
+                <p className="text-gray-500 font-mono">Your AI-generated code analysis will appear here.</p>
               )}
             </div>
           </div>
@@ -125,101 +187,3 @@ export default function PlayGround() {
     </div>
   );
 }
-
-
-
-
-
-// 'use client';
-
-// import React, { useState, useEffect } from 'react';
-// import Prism from 'prismjs';
-// import 'prismjs/themes/prism-tomorrow.css';
-// import 'prismjs/components/prism-javascript';
-
-// export default function PlayGround() {
-//   const [sidebarOpen, setSidebarOpen] = useState(true);
-//   const [code, setCode] = useState(`function helloWorld() {
-//   console.log('Hello, world!');
-// }`);
-
-//   useEffect(() => {
-//     Prism.highlightAll();
-//   }, [code]);
-
-//   return (
-//     <div className="min-h-screen bg-gray-900 text-[#EEEEEE]">
-//       {/* NavBar */}
-//       <nav className="hidden md:flex items-center justify-between px-4 py-10 bg-gray-900 shadow-lg shadow-gray z-50 w-full fixed">
-//         <div className="text-xl font-bold">Code <span className='text-red-600'>RED</span></div>
-//         <button
-//           className="md:hidden block text-white"
-//           onClick={() => setSidebarOpen(!sidebarOpen)}
-//         >
-//           ☰
-//         </button>
-//       </nav>
-
-//       {/* Main Layout */}
-//       <div className="flex flex-col md:flex-row h-[calc(100vh-3rem)] pt-32">
-//         {/* Sidebar */}
-//         <div
-//           className={`bg-gray-900 p-6 transition-all duration-300 md:block ${
-//             sidebarOpen ? 'block w-full md:w-1/5' : 'hidden'
-//           }`}
-//         >
-//           <h2 className="text-lg font-semibold mb-4">Projects</h2>
-//           <ul className="space-y-2">
-//             <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 1</li>
-//             <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 2</li>
-//             <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 3</li>
-//             <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 4</li>
-//             <li className='px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700'>Item 5</li>
-//           </ul>
-//         </div>
-
-//         {/* Content Section */}
-//         <div className="flex flex-1 flex-col md:flex-row">
-//           {/* Input Column */}
-//           <div className="w-full md:w-2/4 lg:w-2/5 bg-gray-900 p-6">
-//             <h2 className="text-lg font-semibold mb-2">Code Editor</h2>
-//             <textarea
-//               className="w-full h-full bg-gray-800 text-[#EEEEEE] px-6 py-8 rounded-2xl resize-none shadow-xl shadow-black/45"
-//               value={code}
-//               onChange={(e) => setCode(e.target.value)}
-//               placeholder="Paste your code here..."
-//             />
-//           </div>
-
-//           {/* AI Response Column */}
-//           <div className="w-full md:w-2/4 lg:w-3/5 bg-gray-900 p-6">
-//             <h2 className="text-lg font-semibold mb-2">AI Analysis</h2>
-//             <div className="bg-gray-800 p-4 rounded-2xl h-full shadow-xl shadow-black/45 overflow-auto">
-//               <pre className={"rounded-2xl language-javascript"} tabIndex={0}>
-//                 <code className="language-javascript">{code || <p>Your AI-generated code analysis will appear here.</p>}</code>
-//               </pre>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Responsive Mobile Layout Adjustment */}
-//       <style jsx>{`
-//         @media (max-width: 767px) {
-//           .flex-col.md\:flex-row > div {
-//             flex-direction: column-reverse;
-//           }
-//           .md\:w-2\/4 {
-//             width: 100% !important;
-//           }
-//           .lg\:w-2\/5, .lg\:w-3\/5 {
-//             width: 100% !important;
-//           }
-//           textarea {
-//             height: 30vh;
-//           }
-//         }
-//       `}</style>
-//     </div>
-//   );
-// }
