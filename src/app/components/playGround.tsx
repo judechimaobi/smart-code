@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Prism from 'prismjs';
 import { highlight, languages } from "prismjs";
 import 'prismjs/themes/prism-tomorrow.css';
@@ -16,7 +16,7 @@ import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 
 export default function PlayGround() {
 
-  const { publicKey, signMessage, connected, connect, sendTransaction } = useWallet();
+  const { publicKey, connected, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { setVisible } = useWalletModal();
   const [isClient, setIsClient] = useState(false);
@@ -67,13 +67,16 @@ export default function PlayGround() {
       );
 
       const signature = await sendTransaction(transaction, connection);
+      const block = await connection.getLatestBlockhash("confirmed");
       const confirmation = await connection.confirmTransaction({
         signature,
-        commitment: 'processed', // Using a valid commitment string
+        ...block,
+        // commitment: 'confirmed', // Using a valid commitment string
       });
 
+      console.log("BLOCK: ", block, "CONFIRMATION: ", confirmation)
       // alert(`Payment sent! Signature: ${signature}`);
-      if (confirmation.value.err === null) return;
+      if (confirmation.value.err !== null) return;
 
       const res = await fetch('/api/audit', {
         method: 'POST',
