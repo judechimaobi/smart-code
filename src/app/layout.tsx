@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
+import Cursor from './components/cursor';
 import "./globals.css";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${ibmMono.variable} ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Cursor />
         {children}
       </body>
     </html>
