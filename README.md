@@ -52,7 +52,7 @@
 ├── tailwind.config.js
 ├── next.config.js
 └── README.md
-
+```
 
 ## ⚙️ Getting Started
 
@@ -87,7 +87,7 @@ npm run dev
 yarn dev
 ```
 
-Navigate to [http://desage.vercel.com](http://desage.vercel.com) to view the app.
+Navigate to [https://desage.vercel.com](https://desage.vercel.com) to view the app.
 
 ---
 
