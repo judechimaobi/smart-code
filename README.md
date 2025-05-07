@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛡️ DeSage — AI-Powered Smart Contract Auditor
 
-## Getting Started
+**DeSage** is an intelligent smart contract auditing tool that leverages AI (like OpenAI’s GPT models) to analyze, detect, and report potential vulnerabilities and inefficiencies in blockchain smart contracts — all in real time.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- 🔍 **AI Code Analysis** — Analyze smart contract code using GPT-3.5 or GPT-4.
+- ⚠️ **Vulnerability Detection** — Find security issues like reentrancy, overflow, and unverified dependencies.
+- ⚡ **Gas Optimization Suggestions** — Get recommendations for improving gas efficiency.
+- 🧠 **AI-Powered Explanations** — Understand vulnerabilities in plain language.
+- 📤 **Interactive Code Input** — Paste your contract directly into the editor.
+- 📋 **Detailed Audit Report** — View clean and readable AI-generated audit results.
+- 💡 **Supports Ethereum, Solana & more** — Audits contracts across multiple EVM and non-EVM platforms.
+
+---
+
+## 📸 Demo
+
+![DeSage UI Screenshot](./public/images/screenshot.png)
+
+---
+
+## 🧰 Tech Stack
+
+| Layer         | Tools Used                                  |
+| ------------- | ------------------------------------------- |
+| Frontend      | React (Next.js 14, App Router), Tailwind CSS |
+| AI Integration| OpenAI GPT-3.5 / GPT-4 via API               |
+| Editor        | `react-simple-code-editor` + PrismJS         |
+| Styling       | Tailwind CSS, Custom Cursors, Animations     |
+| Hosting       | Vercel / Netlify / Custom Node Server        |
+
+---
+
+## 📁 Project Structure
+
+```bash
+├── public/
+│   └── images/              # Cursor & background assets
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx       # Global layout
+│   │   └── page.tsx         # Main entry page
+│   ├── components/
+│   │   ├── Editor.tsx       # Code editor component
+│   │   └── Cursor.tsx       # Custom animated cursor
+│   └── styles/
+│       └── globals.css      # Tailwind & custom styles
+├── .env.local               # OpenAI API key (DO NOT COMMIT)
+├── tailwind.config.js
+├── next.config.js
+└── README.md
+
+
+## ⚙️ Getting Started
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/judechimaobi/de-sage.git
+cd de-sage
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Add Your API Key
+
+Create a `.env.local` file in the root directory:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### 4. Run the App
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate to [http://desage.vercel.com](http://desage.vercel.com) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 How It Works
 
-## Learn More
+1. The user pastes a smart contract (Solidity, Rust, Vyper, etc.) into the editor.
+2. On clicking **Start Audit**, the code is sent to OpenAI's API.
+3. GPT analyzes the contract for:
+   - Known vulnerabilities (e.g., reentrancy, access control issues)
+   - Gas inefficiencies
+   - Best practices compliance
+4. The AI's response is rendered clearly in the results pane.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔒 Security & Ethics
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**DeSage** is a _developer-assist tool_. It does **not** guarantee vulnerability-free code. Always verify AI-generated outputs manually and/or with manual review.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ✨ To-Do / Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [x] Syntax-highlighted code editor
+- [x] AI-powered auditing with GPT
+- [ ] Code auto-formatting
+- [ ] Save/Export Audit Reports (PDF/Markdown)
+- [ ] Support uploading `.sol`/`.rs` files
+- [ ] Integration with GitHub for contract import
+
+---
+
+## 🙌 Contributing
+
+We welcome contributions!
+
+1. Fork the repository
+2. Create a new branch:  
+   ```bash
+   git checkout -b feature-name
+   ```
+3. Make your changes
+4. Commit and push:
+   ```bash
+   git commit -m "Feature: add new feature"
+   git push origin feature-name
+   ```
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+**MIT License** © 2025 [DeSage]
+
+---
+
+## 🌐 Connect with Us
+
+- Twitter: [@desage_ai](https://twitter.com/desage_ai)
+- Website: [https://desage.ai](https://desage.ai)
+- Email: hello@desage.ai
+
+---
+
+> Built with 💚 by developers who care about secure smart contracts.

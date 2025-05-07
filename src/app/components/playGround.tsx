@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Prism from 'prismjs';
 import { highlight, languages } from "prismjs";
 import 'prismjs/themes/prism-tomorrow.css';
@@ -8,22 +8,73 @@ import 'prismjs/components/prism-javascript';
 import { Menu, Loader, AlertCircle, CheckCircle } from 'lucide-react';
 import Editor from "react-simple-code-editor";
 
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { WalletMultiButton,useWalletModal } from '@solana/wallet-adapter-react-ui';
+
+import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+
+
 export default function PlayGround() {
+
+  const { publicKey, signMessage, connected, connect, sendTransaction } = useWallet();
+  const { connection } = useConnection();
+  const { setVisible } = useWalletModal();
+  const [isClient, setIsClient] = useState(false);
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [code, setCode] = useState(`function helloWorld() {
-  console.log('Hello, world!');
-}`);
+    console.log('Hello, world!');
+  }`);
   const [aiResult, setAiResult] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
     Prism.highlightAll();
   }, [code, aiResult]);
+
+
+
+
 
   const handleAudit = async () => {
     setLoading(true);
     try {
+      if (!connected) {
+        setVisible(true);
+        return;
+      }
+      if (!publicKey) {
+        alert("Wallet not connected.");
+        return;
+      }
+      
+
+      const recipient = new PublicKey('6iiZCEwpqTHAch3miBmVScL5Zj6vcsP8Y5i9mEXVGBnS'); // Replace with your wallet
+      const lamports = 0.01 * 1e9;
+
+
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey,
+          toPubkey: recipient,
+          lamports,
+        })
+      );
+
+      const signature = await sendTransaction(transaction, connection);
+      const confirmation = await connection.confirmTransaction({
+        signature,
+        commitment: 'processed', // Using a valid commitment string
+      });
+
+      // alert(`Payment sent! Signature: ${signature}`);
+      if (confirmation.value.err === null) return;
+
       const res = await fetch('/api/audit', {
         method: 'POST',
         headers: {
@@ -51,6 +102,8 @@ export default function PlayGround() {
     }
   };
 
+  if (!isClient) return null;
+
   return (
     <div className="min-h-screen bg-gray-900 text-[#EEEEEE] font-space relative">
       {/* Background Grid Pattern */}
@@ -70,7 +123,7 @@ export default function PlayGround() {
       >
         {/* Navbar */}
         <nav
-          className="flex items-center justify-between px-6 py-6 fixed top-0 left-0 w-full z-50 border-b-[.1] border-b-white/30"
+          className="flex items-center justify-between px-6 py-2 fixed top-0 left-0 w-full z-50 border-b-[.1] border-b-white/30"
           style={{
             backgroundImage: `url('../images/bg-4.jpeg')`,
             backgroundSize: 'cover',
@@ -84,12 +137,29 @@ export default function PlayGround() {
             De<span className="text-green-400">Sage</span> Playground
           </div>
 
-          <button
-            className="md:hidden text-white z-10"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            <Menu size={24} />
-          </button>
+          <div className='z-10'>
+            <div className="flex gap-2 items-center">
+              {connected && publicKey ? (
+                <div className="align-middle text-xs text-right">
+                  <p><strong>Connected Wallet:</strong> {publicKey.toBase58()}</p>
+                </div>
+              ) : (
+                <p className="text-xs text-right">Wallet not connected.</p>
+              )}
+              <WalletMultiButton />
+            </div>
+            {/* <button className="bg-white text-green-950 z-10 rounded-full px-4 py-3 font-bold cursor-pointer">
+              Connect wallet
+            </button> */}
+
+            <button
+              className="md:hidden text-white z-10"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <Menu size={24} />
+            </button>
+          </div>
+          
         </nav>
 
         {/* Main Layout */}
@@ -105,7 +175,9 @@ export default function PlayGround() {
               <span className="text-green-400 font-bold">DeSage</span> is an AI-powered Smart Contract Code Auditor that analyzes code for vulnerabilities, gas inefficiencies, and compliance risks using GPT models. Paste your code, receive insights, and deploy with confidence.
             </p>
             <ul className="space-y-2 mt-4">
-              <li className="px-4 py-4 rounded-xl bg-green-950 hover:bg-green-900 flex items-center gap-2 cursor-pointer">
+              <li className="px-4 py-4 rounded-xl bg-green-950 hover:bg-green-900 flex items-center gap-2 cursor-pointer"
+                onClick={() => window.open("https://github.com/judechimaobi/de-sage", "_blank")}
+              >
                 <CheckCircle size={18} className="text-green-500" />
                 {/* <Github size={18} className="text-green-500" /> */}
                 View repo on Github
