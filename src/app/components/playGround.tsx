@@ -53,137 +53,133 @@ export default function PlayGround() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-[#EEEEEE]">
-      {/* NavBar */}
-      <nav className="hidden md:flex items-center justify-between px-4 py-10 bg-gray-900 shadow-lg shadow-gray z-50 w-full fixed">
-        <div className="text-xl font-bold">
-          Code <span className="text-red-600">RED</span>
-        </div>
-        <button
-          className="md:hidden block text-white focus:outline-none"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          <Menu size={24} />
-        </button>
-      </nav>
+    <div className="min-h-screen h-screen bg-gray-900 text-[#EEEEEE] font-space relative">
+      <div
+        className="absolute inset-0 h-full"
+        style={{
+          backgroundImage: `url('../images/axiom-pattern.png')`,
+          backgroundSize: 'auto',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'repeat',
+          opacity: 0.3,
+          zIndex: 1, 
+        }}
+      />
+      <div className="relative z-10 h-full backdrop-blur-xs/20">
+      {/* <div className="absolute inset-0 backdrop-blur-md"></div> */}
+      
+      
+        {/* NavBar */}
+        <nav className="hidden md:flex items-center justify-between px-4 py-10 z-50 w-full fixed">
+          <div className="text-xl font-bold">
+            De<span className="text-green-400">Sage</span> Playground
+          </div>
+          <button
+            className="md:hidden block text-white focus:outline-none"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <Menu size={24} />
+          </button>
+        </nav>
 
-      {/* Main Layout */}
-      <div className="flex flex-col md:flex-row h-[calc(100vh-3rem)] pt-32">
-        {/* Sidebar */}
-        <div
-          className={`bg-gray-900 p-6 transition-all duration-300 md:block ${
-            sidebarOpen ? 'block w-full md:w-1/5' : 'hidden'
-          }`}
-        >
-          <h2 className="text-lg font-semibold mb-4">Projects</h2>
-          <ul className="space-y-2">
-            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
-              <CheckCircle size={18} className="text-green-500" />
-              Item 1
-            </li>
-            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
-              <CheckCircle size={18} className="text-green-500" />
-              Item 2
-            </li>
-            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
-              <CheckCircle size={18} className="text-green-500" />
-              Item 3
-            </li>
-            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
-              <CheckCircle size={18} className="text-green-500" />
-              Item 4
-            </li>
-            <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
-              <CheckCircle size={18} className="text-green-500" />
-              Item 5
-            </li>
-          </ul>
-        </div>
-
-        {/* Content Section */}
-        <div className="flex flex-1 flex-col md:flex-row">
-          {/* Input Column */}
-          <div className="w-full md:w-2/4 lg:w-2/5 bg-gray-900 p-6">
-            <h2 className="text-lg font-semibold mb-2">Code Editor</h2>
-            {/* <textarea
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setCode(e.target.value)}
-              className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] px-6 py-8 rounded-2xl resize-none shadow-lg font-mono border-2 border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/50 text-sm"
-              value={code}
-              placeholder="Paste your code here..."
-            /> */}
-            <Editor
-              value={code}
-              onValueChange={setCode}
-              highlight={(code) => highlight(code, languages.javascript, "javascript")}
-              padding={16}
-              className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] font-mono text-sm rounded-2xl border-2 border-gray-600 shadow-lg focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/50"
-              style={{
-                whiteSpace: "pre-wrap",
-                outline: "none",
-                overflow: "auto",
-              }}
-              placeholder="Paste your code here..."
-            />
-            {/* <pre className="mt-4 p-4 bg-gray-800 text-[#EEEEEE] rounded-2xl overflow-auto shadow-xl shadow-black/45">
-              <code className="language-javascript">{code}</code>
-            </pre> */}
-            <button
-              className="mt-4 w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold cursor-pointer flex items-center justify-center gap-2"
-              onClick={handleAudit}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader size={18} className="animate-spin" />
-                  Analyzing...
-                </>
-              ) : (
-                'Audit Code'
-              )}
-            </button>
+        {/* Main Layout */}
+        <div className="flex flex-col md:flex-row h-[calc(100vh-3rem)] pt-24">
+          
+          {/* Sidebar */}
+          <div
+            className={` p-6 transition-all duration-300 md:block ${
+              sidebarOpen ? 'block w-full md:w-1/5' : 'hidden'
+            }
+            `}
+          >
+            <h2 className="text-lg font-semibold mb-4">Projects</h2>
+            <p className='px-4 py-4 bg-gray-800 font-ibm rounded-2xl shadow-xl transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ease-in-out'>
+            <span className='text-green-400 bold'>DeSage</span> is an AI-powered Smart Contract Code Auditor that helps developers identify vulnerabilities and optimize smart contracts. Using AI models like GPT-3.5 or GPT-4, it analyzes contract code for potential issues such as security flaws, gas inefficiencies, and compliance risks. Users can paste their code, receive detailed AI-generated analysis, and address flagged issues before deployment. It’s an essential tool for developers ensuring secure and efficient smart contracts across blockchain platforms like Ethereum and Solana.
+            </p>
+            {/* <ul className="space-y-2">
+              <li className="px-4 py-4 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center gap-2 cursor-pointer">
+                <CheckCircle size={18} className="text-green-500" />
+                Item 1
+              </li>
+            </ul> */}
           </div>
 
-          {/* AI Response Column */}
-          <div className="w-full md:w-2/4 lg:w-3/5 bg-gray-900 p-6">
-            <h2 className="text-lg font-semibold mb-2">AI Analysis</h2>
-            <div className="bg-gray-800 p-4 rounded-2xl h-full shadow-xl overflow-auto whitespace-pre-wrap">
-              {loading ? (
-                <p className="text-gray-400 flex items-center gap-2">
-                  <Loader size={18} className="animate-spin" />
-                  Running GPT-3.5 Audit...
-                </p>
-              ) : error ? (
-                <p className="text-red-600 flex items-center gap-2">
-                  <AlertCircle size={18} />
-                  {error}
-                </p>
-              ) : aiResult ? (
-                <p>{aiResult}</p>
-              ) : (
-                <p className="text-gray-500 font-mono">Your AI-generated code analysis will appear here.</p>
-              )}
+          {/* Content Section */}
+          <div className="flex flex-1 flex-col md:flex-row">
+            {/* Input Column */}
+            <div className="w-full md:w-2/4 lg:w-2/5 p-6">
+              <h2 className="text-lg font-semibold mb-2">Code Editor</h2>
+              <Editor
+                value={code}
+                onValueChange={setCode}
+                highlight={(code) => highlight(code, languages.javascript, "javascript")}
+                padding={16}
+                className="w-full h-[70vh] bg-gray-800 text-[#EEEEEE] font-mono text-sm rounded-2xl border-2 border-gray-600 shadow-lg focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/50"
+                style={{
+                  whiteSpace: "pre-wrap",
+                  outline: "none",
+                  overflow: "auto",
+                }}
+                placeholder="Paste your code here..."
+              />
+              <button
+                className="mt-4 w-full py-3 px-4 bg-green-500 hover:bg-green-600 text-green-950 rounded-xl font-semibold cursor-pointer flex items-center justify-center gap-2"
+                onClick={handleAudit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Loader size={18} className="animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  'Start Audit'
+                )}
+              </button>
+            </div>
+
+            {/* AI Response Column */}
+            <div className="w-full md:w-2/4 lg:w-3/5 p-6">
+              <h2 className="text-lg font-semibold mb-2">AI Analysis</h2>
+              <div className="bg-gray-800 p-4 rounded-2xl h-full shadow-xl overflow-auto whitespace-pre-wrap">
+                {loading ? (
+                  <p className="text-gray-400 flex items-center gap-2">
+                    <Loader size={18} className="animate-spin" />
+                    Running AI Audit...
+                  </p>
+                ) : error ? (
+                  <p className="text-red-600 flex items-center gap-2">
+                    <AlertCircle size={18} />
+                    {error}
+                  </p>
+                ) : aiResult ? (
+                  <p>{aiResult}</p>
+                ) : (
+                  <p className="text-gray-500 font-mono">Your AI-generated code analysis will appear here...</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Responsive Mobile Layout Adjustment */}
-      <style jsx>{`
-        @media (max-width: 767px) {
-          .flex-col.md\:flex-row > div {
-            flex-direction: column-reverse;
-          }
-          .md\:w-2\/4 {
-            width: 100% !important;
-          }
-          .lg\:w-2\/5, .lg\:w-3\/5 {
-            width: 100% !important;
-          }
-          textarea {
-            height: 30vh;
-          }
-        }
-      `}</style>
+      {/* Responsive Mobile Layout Adjustment  */}
+     <style jsx>{`
+       @media (max-width: 767px) {
+         .flex-col.md\:flex-row > div {
+           flex-direction: column-reverse;
+         }
+         .md\:w-2\/4 {
+           width: 100% !important;
+         }
+         .lg\:w-2\/5, .lg\:w-3\/5 {
+           width: 100% !important;
+         }
+         textarea {
+           height: 30vh;
+         }
+       }
+     `}</style>
+         
     </div>
   );
 }
