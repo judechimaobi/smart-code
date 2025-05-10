@@ -5,7 +5,7 @@ import Prism from 'prismjs';
 import { highlight, languages } from "prismjs";
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-javascript';
-import { Menu, Loader, AlertCircle, CheckCircle, AlignRight } from 'lucide-react';
+import { Loader, AlertCircle, CheckCircle, AlignRight } from 'lucide-react';
 import Editor from "react-simple-code-editor";
 
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
@@ -16,7 +16,7 @@ import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 
 export default function PlayGround() {
 
-  const { publicKey, connected, sendTransaction, disconnect, connect } = useWallet();
+  const { publicKey, connected, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const { setVisible } = useWalletModal();
   const [isClient, setIsClient] = useState(false);
