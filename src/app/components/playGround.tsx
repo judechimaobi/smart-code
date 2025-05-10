@@ -21,7 +21,7 @@ export default function PlayGround() {
   const { setVisible } = useWalletModal();
   const [isClient, setIsClient] = useState(false);
 
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [code, setCode] = useState(`function helloWorld() {
     console.log('Hello, world!');
   }`);
@@ -168,10 +168,10 @@ export default function PlayGround() {
         </nav>
 
         {/* Main Layout */}
-        <div className="flex flex-col md:flex-row pt-24 min-h-screen">
+        <div className="flex flex-col md:flex-row pt-15 min-h-screen">
           {/* Sidebar */}
           <div
-            className={`w-full md:w-1/5 p-6 transition-all duration-300 ${
+            className={`w-full md:w-1/5 p-6 transition-all absolute md:relative bg-black md:bg-transparent rounded-xl duration-300 ${
               sidebarOpen ? 'block' : 'hidden md:block'
             }`}
           >
