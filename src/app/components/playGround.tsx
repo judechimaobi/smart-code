@@ -229,7 +229,7 @@ export default function PlayGround() {
             {/* AI Analysis */}
             <div className="w-full md:w-1/2">
               <h2 className="text-lg font-semibold mb-2">AI Analysis</h2>
-              <div className="bg-black/30 p-4 rounded-2xl h-[60vh] border-2 border-white/30  overflow-auto whitespace-pre-wrap">
+              <div className="bg-black/30 p-4 rounded-2xl md:h-[60vh] h-[45vh] border-2 border-white/30  overflow-auto whitespace-pre-wrap">
                 {loading ? (
                   <p className="text-gray-400 flex items-center gap-2">
                     <Loader size={18} className="animate-spin" />
