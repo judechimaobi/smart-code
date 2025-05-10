@@ -5,7 +5,7 @@ import Prism from 'prismjs';
 import { highlight, languages } from "prismjs";
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-javascript';
-import { Menu, Loader, AlertCircle, CheckCircle } from 'lucide-react';
+import { Menu, Loader, AlertCircle, CheckCircle, AlignRight } from 'lucide-react';
 import Editor from "react-simple-code-editor";
 
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
@@ -16,7 +16,7 @@ import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 
 export default function PlayGround() {
 
-  const { publicKey, connected, sendTransaction } = useWallet();
+  const { publicKey, connected, sendTransaction, disconnect, connect } = useWallet();
   const { connection } = useConnection();
   const { setVisible } = useWalletModal();
   const [isClient, setIsClient] = useState(false);
@@ -52,7 +52,6 @@ export default function PlayGround() {
         alert("Wallet not connected.");
         return;
       }
-      
 
       const recipient = new PublicKey('6iiZCEwpqTHAch3miBmVScL5Zj6vcsP8Y5i9mEXVGBnS'); // Replace with your wallet
       const lamports = 0.01 * 1e9;
@@ -74,7 +73,7 @@ export default function PlayGround() {
         // commitment: 'confirmed', // Using a valid commitment string
       });
 
-      console.log("BLOCK: ", block, "CONFIRMATION: ", confirmation)
+      // console.log("BLOCK: ", block, "CONFIRMATION: ", confirmation)
       // alert(`Payment sent! Signature: ${signature}`);
       if (confirmation.value.err !== null) return;
 
@@ -119,11 +118,8 @@ export default function PlayGround() {
           backgroundRepeat: 'repeat',
         }}
       />
-
       {/* Blurred Overlay + Content */}
-      <div className="relative z-10 min-h-screen bg-black/60"
-        
-      >
+      <div className="relative z-10 min-h-screen bg-black/60">
         {/* Navbar */}
         <nav
           className="flex items-center justify-between px-6 py-2 fixed top-0 left-0 w-full z-50 border-b-[.1] border-b-white/30"
@@ -140,29 +136,35 @@ export default function PlayGround() {
             De<span className="text-green-400">Sage</span> Playground
           </div>
 
-          <div className='z-10'>
+          <div className='z-10 flex gap-2'>
             <div className="flex gap-2 items-center">
-              {connected && publicKey ? (
+              {/* {connected && publicKey ? (
                 <div className="align-middle text-xs text-right">
-                  <p><strong>Connected Wallet:</strong> {publicKey.toBase58()}</p>
+                  <p className='flex flex-col gap-1'>
+                    <strong>Connected Wallet:</strong>{' '}
+                    {publicKey.toBase58().slice(0, 6)}....
+                    {publicKey.toBase58().slice(-6)}
+                  </p>
                 </div>
               ) : (
                 <p className="text-xs text-right">Wallet not connected.</p>
-              )}
+              )} */}
               <WalletMultiButton />
+              
+              {/* <button
+                // onClick={connected ? disconnect : connect}
+                onClick={() => setVisible(true)}
+                className="bg-white hover:bg-white/80 text-green-950 px-6 py-3 rounded-lg font-bold transition"
+              >
+                {connected
+                  ? `${publicKey?.toBase58().slice(0, 4)}...${publicKey?.toBase58().slice(-4)}`
+                  : 'Connect Wallet'}
+              </button> */}
             </div>
-            {/* <button className="bg-white text-green-950 z-10 rounded-full px-4 py-3 font-bold cursor-pointer">
-              Connect wallet
-            </button> */}
-
-            <button
-              className="md:hidden text-white z-10"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-            >
-              <Menu size={24} />
+            <button className="md:hidden text-white z-10" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              <AlignRight size={24} />
             </button>
           </div>
-          
         </nav>
 
         {/* Main Layout */}
@@ -189,9 +191,9 @@ export default function PlayGround() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col md:flex-row gap-6 p-6">
+          <div className="flex-1 flex flex-col md:flex-row gap-6 p-6 min-h-screen">
             {/* Editor */}
-            <div className="w-full md:w-1/2">
+            <div className="w-[90%] md:w-1/2 md:relative bottom-4 fixed">
               <h2 className="text-lg font-semibold mb-2">Code Editor</h2>
               <Editor
                 value={code}
@@ -200,7 +202,7 @@ export default function PlayGround() {
                   highlight(code, languages.javascript, 'javascript')
                 }
                 padding={16}
-                className="w-full h-[60vh] bg-green-950/40 text-[#EEEEEE] font-mono text-sm rounded-2xl border-2 border-green-600 shadow-lg focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/50"
+                className="w-full h-[20vh] md:min-h-[60vh] bg-green-950/40 text-[#EEEEEE] font-mono text-sm rounded-2xl border-2 border-green-600 shadow-lg focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-500/50"
                 style={{
                   whiteSpace: 'pre-wrap',
                   outline: 'none',
